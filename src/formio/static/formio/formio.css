@@ -1,0 +1,11 @@
+div.card {
+  margin-top: 10px;
+}
+
+ul.nav {
+  margin-bottom: 20px;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
