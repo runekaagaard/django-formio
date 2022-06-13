@@ -1,7 +1,7 @@
 Django form.io
 ==============
 
-Build and submit versioned form.io forms from inside Django. Built with `Django Hypergen <hypergen.it>`_.
+Build and submit versioned form.io forms from inside Django. Built with `Django Hypergen <https://hypergen.it>`_.
 
 Screenshots
 ===========
