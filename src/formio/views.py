@@ -80,6 +80,11 @@ def submit_test(request, builder_id, object_id, submission, version):
 def submit(request, builder_id, object_id, submission):
     submit_save(request, builder_id, object_id, submission)
 
+@liveview(path="history/<int:builder_id>/", perm="formio.view_builder", base_template=templates.base_template())
+def history(request, /, *, builder_id):
+    builder = Builder.objects.get(pk=builder_id)
+    templates.history(builder)
+
 @liveview(path="user_submissions/<int:builder_id>/", perm="formio.view_submission",
           base_template=templates.base_template())
 def user_submissions(request, /, *, builder_id):

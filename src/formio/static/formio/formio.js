@@ -4,7 +4,6 @@ var formio = window.formio
 formio.builder_value_func = function () {
   var value = hypergen.clientState.formio.form
   value.draft = formio.builder.form
-  console.log("value func", value)
   return JSON.stringify(value)
 }
 

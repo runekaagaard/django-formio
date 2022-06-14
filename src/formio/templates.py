@@ -67,11 +67,12 @@ def index(builders):
                                                 for title, _, href in builder_links(x.pk, x.version)))
             for x in builders)
 
-def builder_nav(builder_id, internal_title, version):
+def builder_nav(builder_id, internal_title, version, subtitle=None):
     from formio import views
 
     h1(internal_title)
-    p("Showing builder at version ", version, class_="text-muted")
+    if subtitle:
+        div(subtitle)
 
     ul((li(
         a(title, href=url,
@@ -82,7 +83,8 @@ def edit(form, can_publish):
     from formio import views
 
     if form.instance.pk is not None:
-        builder_nav(form.instance.pk, form["internal_title"].value(), form.instance.version)
+        builder_nav(form.instance.pk, form["internal_title"].value(), form.instance.version,
+                    subtitle=p("Editing builder at version ", form.instance.version, class_="text-muted"))
     else:
         h2("Add new builder")
 
@@ -124,7 +126,8 @@ def edit(form, can_publish):
 
 def test(pk, internal_title, version):
     from formio import views
-    builder_nav(pk, internal_title, version)
+    builder_nav(pk, internal_title, version, subtitle=p("Testing builder at version ", version,
+                                                        class_="text-muted"))
 
     with card(None):
         div(id="formio")
@@ -144,13 +147,12 @@ def display(form_id, object_id):
             command("formio.init_form_display", "formio", views.submit.reverse(), form_id, object_id)
 
 def user_submissions(builder, submissions):
-    builder_nav(builder.pk, builder.internal_title, builder.version)
+    builder_nav(builder.pk, builder.internal_title, builder.version,
+                subtitle=p("Showing", len(submissions), "user submissions", class_="text-muted", sep=" "))
 
     if not submissions:
         p("This builder doesn't yet have any submissions.")
         return
-
-    p("Showing", len(submissions), "user submissions", sep=" ", end=".")
 
     components = builder.components()
     with table(class_="table table-bordered table-striped"):
@@ -175,3 +177,13 @@ def user_submissions(builder, submissions):
                     )),
                     (th(submission.data[k] if k in submission.data else "") for k in components.keys()),
                 )
+
+def history(builder):
+    from formio import views
+    builder_nav(builder.pk, builder.internal_title, builder.version)
+    with table(class_="table table-bordered table-striped"):
+        with thead():
+            tr(th("Version"), th("Added", colspan=2))
+        with tbody():
+            for version in builder.form["versions"].keys():
+                tr(td(version), td("todo"), td(a("todo", href="TODO")))
